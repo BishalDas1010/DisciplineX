@@ -104,7 +104,8 @@ fun MyAppNavigation() {
             composable(Screen.Shield.route) { Shield_Screen() }
             composable(Screen.Settings.route) { SettingsScreen() }
             composable (Screen.Focus_Screeen.route){ FocusSessionScreen()  }
-            composable(Screen.Focus_session.route) { FocusingScreen()  }
+            composable(Screen.Focus_Screeen.route) { FocusingScreen()  }
+            composable (Screen.Focus_session.route){ FocusSessionScreen() }
         }
     }
 }
