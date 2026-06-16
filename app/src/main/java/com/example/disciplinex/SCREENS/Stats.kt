@@ -1,5 +1,6 @@
 
 package com.example.disciplinex.SCREENS
+
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -89,7 +90,7 @@ data class MonthStats(
 // ── Main Screen ───────────────────────────────────────────────────────────────
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StatisticsScreen(
+fun Stats(
     weekStats:  WeekStats  = WeekStats(),
     monthStats: MonthStats = MonthStats(),
     onBack: () -> Unit = {}
@@ -621,6 +622,6 @@ private fun StatCard(
 @Composable
 fun StatisticsScreenPreview() {
     MaterialTheme {
-        StatisticsScreen()
+        Stats()
     }
 }

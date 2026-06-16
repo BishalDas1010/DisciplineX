@@ -1,5 +1,4 @@
 package com.example.disciplinex.SCREENS
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -22,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.disciplinex.R
 
-// ── Color tokens ──────────────────────────────────────────────────────────────
+// Color tokens
 private val BgDeep       = Color(0xFF0B0B18)
 private val BgCard       = Color(0xFF14142A)
 private val AccentBlue   = Color(0xFF5B5FFF)
@@ -33,14 +32,14 @@ private val TextSecond   = Color(0xFFAAAAAA)
 private val TextMuted    = Color(0xFF55556A)
 private val NavBg        = Color(0xFF10101E)
 
-// ── Preview ───────────────────────────────────────────────────────────────────
+// Preview
 @Preview(showSystemUi = true)
 @Composable
 fun HomePreview() {
     HomeScreen()
 }
 
-// ── Main Screen ───────────────────────────────────────────────────────────────
+// Main Screen
 @Composable
 fun HomeScreen(
     onNavHome: () -> Unit = {},
@@ -62,7 +61,7 @@ fun HomeScreen(
         ) {
             Spacer(Modifier.height(48.dp))
 
-            // ── Header ────────────────────────────────────────────────────────
+            // Header
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -105,7 +104,7 @@ fun HomeScreen(
 
             Spacer(Modifier.height(22.dp))
 
-            // ── Today's Focus Card ────────────────────────────────────────────
+            // Today's Focus Card
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -159,7 +158,7 @@ fun HomeScreen(
 
             Spacer(Modifier.height(14.dp))
 
-            // ── Streak + Daily Goal ───────────────────────────────────────────
+            // Streak + Daily Goal
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(14.dp)
@@ -224,7 +223,7 @@ fun HomeScreen(
 
             Spacer(Modifier.height(14.dp))
 
-            // ── Start Focus Session Button ────────────────────────────────────
+            // Start Focus Session Button
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -258,7 +257,7 @@ fun HomeScreen(
 
             Spacer(Modifier.height(14.dp))
 
-            // ── Focus Shield Card ─────────────────────────────────────────────
+            //  Focus Shield Card
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -320,48 +319,48 @@ fun HomeScreen(
                 }
             }
 
-            Spacer(Modifier.weight(1f))
 
-            // ── Bottom Nav Bar ────────────────────────────────────────────────
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                    .background(NavBg)
-                    .padding(vertical = 10.dp, horizontal = 10.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                BottomNavItem(
-                    iconRes  = R.drawable.play,  // swap: home icon
-                    label    = "Home",
-                    selected = true,
-                    onClick  = onNavHome
-                )
-                BottomNavItem(
-                    iconRes  = R.drawable.play,  // swap: bar chart icon
-                    label    = "Stats",
-                    selected = false,
-                    onClick  = onNavStats
-                )
-                BottomNavItem(
-                    iconRes  = R.drawable.play,  // swap: shield icon
-                    label    = "Shield",
-                    selected = false,
-                    onClick  = onNavShield
-                )
-                BottomNavItem(
-                    iconRes  = R.drawable.play,  // swap: settings/gear icon
-                    label    = "Settings",
-                    selected = false,
-                    onClick  = onNavSettings
-                )
-            }
+
+            // ── Bottom Nav Bar
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+//                    .background(NavBg)
+//                    .padding(vertical = 10.dp, horizontal = 10.dp),
+//                horizontalArrangement = Arrangement.SpaceEvenly,
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                BottomNavItem(
+//                    iconRes  = R.drawable.home,  // swap: home icon
+//                    label    = "Home",
+//                    selected = true,
+//                    onClick  = onNavHome
+//                )
+//                BottomNavItem(
+//                    iconRes  = R.drawable.graph,  // swap: bar chart icon
+//                    label    = "Stats",
+//                    selected = false,
+//                    onClick  = onNavStats
+//                )
+//                BottomNavItem(
+//                    iconRes  = R.drawable.shield,  // swap: shield icon
+//                    label    = "Shield",
+//                    selected = false,
+//                    onClick  = onNavShield
+//                )
+//                BottomNavItem(
+//                    iconRes  = R.drawable.settings,  // swap: settings/gear icon
+//                    label    = "Settings",
+//                    selected = false,
+//                    onClick  = onNavSettings
+//                )
+//            }
         }
     }
 }
 
-// ── Mini Bar Chart ────────────────────────────────────────────────────────────
+// ── Mini Bar Chart
 @Composable
 private fun MiniBarChart() {
     val heights = listOf(0.35f, 0.55f, 0.45f, 0.75f, 1.0f)
@@ -381,7 +380,7 @@ private fun MiniBarChart() {
     }
 }
 
-// ── Bottom Nav Item ───────────────────────────────────────────────────────────
+// Bottom Nav Item
 @Composable
 private fun BottomNavItem(
     iconRes: Int,

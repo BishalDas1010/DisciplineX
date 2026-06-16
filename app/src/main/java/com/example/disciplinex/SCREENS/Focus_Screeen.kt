@@ -1,10 +1,11 @@
-
 package com.example.disciplinex.SCREENS
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -12,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter // Added import for Painter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -21,25 +22,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.disciplinex.R
 
+// ── Data model for a blocked app entry ───────────────────────────────────────
+data class BlockedAppItem(
+    val iconRes: Int,        // e.g. R.drawable.ic_instagram
+    val contentDesc: String
+)
+
 @Preview(showSystemUi = true)
 @Composable
 fun FocusSessionScreen() {
-    // State management for the clickable selections
     var selectedDuration by remember { mutableStateOf("30 min") }
 
-    // Theme Colors based on the UI
-    val darkBackground = Color(0xFF0F111A)
+    val darkBackground    = Color(0xFF0F111A)
     val surfaceBackground = Color(0xFF1E2132)
-    val primaryPurple = Color(0xFF5A44E8)
-    val textPrimary = Color.White
-    val textSecondary = Color(0xFFA0A3B5)
-//about box
+    val primaryPurple     = Color(0xFF5A44E8)
+    val textPrimary       = Color.White
+    val textSecondary     = Color(0xFFA0A3B5)
+
     var selectedMode by remember { mutableStateOf("Monk Mode") }
+
     val modeDescriptions = mapOf(
-        "Normal" to "Normal Mode allows you to pause your session anytime. Flexible and relaxed.",
-        "Strict" to "Strict Mode limits interruptions. You can't pause but can exit if needed.",
+        "Normal"    to "Normal Mode allows you to pause your session anytime. Flexible and relaxed.",
+        "Strict"    to "Strict Mode limits interruptions. You can't pause but can exit if needed.",
         "Monk Mode" to "Monk Mode prevents you from leaving the app until the session ends."
     )
+
+    // ── Replace these with your actual app icon drawables ────────────────────
+    // e.g. R.drawable.ic_instagram, R.drawable.ic_youtube, R.drawable.ic_facebook
+    val blockedApps = listOf(
+        BlockedAppItem(iconRes = R.drawable.lock, contentDesc = "Instagram"),
+        BlockedAppItem(iconRes = R.drawable.lock, contentDesc = "YouTube"),
+        BlockedAppItem(iconRes = R.drawable.lock, contentDesc = "Facebook"),
+    )
+    val extraBlockedCount = 3   // apps blocked but not shown as icons
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -47,7 +63,7 @@ fun FocusSessionScreen() {
             .padding(16.dp)
             .statusBarsPadding()
     ) {
-        // Top App Bar
+        // ── Top App Bar ───────────────────────────────────────────────────────
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
@@ -76,13 +92,12 @@ fun FocusSessionScreen() {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // --- Duration Section ---
+        // ── Duration Section ──────────────────────────────────────────────────
         Text("Choose Duration", color = textPrimary, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
         val durations = listOf("15 min", "30 min", "45 min", "1 hour", "2 hours", "Custom")
 
-        // 3x2 Grid for Durations
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
                 durations.take(3).forEach { duration ->
@@ -112,7 +127,7 @@ fun FocusSessionScreen() {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // --- Mode Section ---
+        // ── Mode Section ──────────────────────────────────────────────────────
         Text("Choose Mode", color = textPrimary, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -120,7 +135,7 @@ fun FocusSessionScreen() {
             ModeCard(
                 title = "Normal",
                 subtitle = "Pause allowed",
-                icon = painterResource(id = R.drawable.lock), // Updated
+                icon = painterResource(id = R.drawable.lock),
                 isSelected = selectedMode == "Normal",
                 onClick = { selectedMode = "Normal" },
                 modifier = Modifier.weight(1f),
@@ -130,7 +145,7 @@ fun FocusSessionScreen() {
             ModeCard(
                 title = "Strict",
                 subtitle = "Limited interruptions",
-                icon = painterResource(id = R.drawable.lock), // Updated
+                icon = painterResource(id = R.drawable.lock),
                 isSelected = selectedMode == "Strict",
                 onClick = { selectedMode = "Strict" },
                 modifier = Modifier.weight(1f),
@@ -140,7 +155,7 @@ fun FocusSessionScreen() {
             ModeCard(
                 title = "Monk Mode",
                 subtitle = "No exits allowed",
-                icon = painterResource(id = R.drawable.lock), // Updated
+                icon = painterResource(id = R.drawable.lock),
                 isSelected = selectedMode == "Monk Mode",
                 onClick = { selectedMode = "Monk Mode" },
                 modifier = Modifier.weight(1f),
@@ -151,7 +166,7 @@ fun FocusSessionScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // --- About Info Box ---
+        // ── About Info Box ────────────────────────────────────────────────────
         Surface(
             color = surfaceBackground,
             shape = RoundedCornerShape(16.dp),
@@ -167,14 +182,14 @@ fun FocusSessionScreen() {
                 Spacer(modifier = Modifier.width(12.dp))
                 Column {
                     Text(
-                        "About $selectedMode",  // 👈 dynamic title
+                        "About $selectedMode",
                         color = textPrimary,
                         fontWeight = FontWeight.Medium,
                         fontSize = 14.sp
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = modeDescriptions[selectedMode] ?: "",  // 👈 dynamic description
+                        text = modeDescriptions[selectedMode] ?: "",
                         color = textSecondary,
                         fontSize = 12.sp,
                         lineHeight = 18.sp
@@ -183,9 +198,40 @@ fun FocusSessionScreen() {
             }
         }
 
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // ── Blocked Apps Section ──────────────────────────────────────────────
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Blocked Apps",
+                color = textPrimary,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp
+            )
+            Text(
+                text = "Manage",
+                color = primaryPurple,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.clickable { /* navigate to manage screen */ }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        BlockedAppsRow(
+            apps = blockedApps,
+            extraCount = extraBlockedCount,
+            surfaceColor = surfaceBackground
+        )
+
         Spacer(modifier = Modifier.weight(1f))
 
-        // --- Start Session Button ---
+        // ── Start Session Button ──────────────────────────────────────────────
         Button(
             onClick = { /* Handle Start Session */ },
             modifier = Modifier
@@ -196,16 +242,88 @@ fun FocusSessionScreen() {
             colors = ButtonDefaults.buttonColors(containerColor = primaryPurple)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.lock), // Updated
+                painter = painterResource(id = R.drawable.lock),
                 contentDescription = "Start",
                 tint = Color.White
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Start Session", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+            Text(
+                "Start Session",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
         }
     }
 }
 
+// ── Blocked Apps Row ──────────────────────────────────────────────────────────
+/**
+ * Horizontal row of circular app icons + optional "+N" overflow badge.
+ *
+ * @param apps         Visible app entries (3–5 recommended)
+ * @param extraCount   How many more apps are blocked but not shown as icons
+ * @param surfaceColor Background for the "+N" badge
+ */
+@Composable
+fun BlockedAppsRow(
+    apps: List<BlockedAppItem>,
+    extraCount: Int = 0,
+    surfaceColor: Color
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        apps.forEach { app ->
+            AppIconCircle(app = app)
+        }
+
+        if (extraCount > 0) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(CircleShape)
+                    .background(surfaceColor)
+                    .border(1.dp, Color(0xFF2E2A45), CircleShape)
+            ) {
+                Text(
+                    text = "+$extraCount",
+                    color = Color(0xFFA0A3B5),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
+    }
+}
+
+// ── Single App Icon Circle ────────────────────────────────────────────────────
+/**
+ * Circular container for one blocked app icon.
+ * Set tint = Color.Unspecified to preserve your icon's original colors.
+ */
+@Composable
+fun AppIconCircle(app: BlockedAppItem) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .size(44.dp)
+            .clip(CircleShape)
+            .background(Color(0xFF1E2132))
+            .border(1.dp, Color(0xFF2E2A45), CircleShape)
+    ) {
+        Icon(
+            painter = painterResource(id = app.iconRes),
+            contentDescription = app.contentDesc,
+            tint = Color.Unspecified,   // preserves original icon colors
+            modifier = Modifier.size(28.dp)
+        )
+    }
+}
+
+// ── Duration Button ───────────────────────────────────────────────────────────
 @Composable
 fun DurationButton(
     text: String,
@@ -234,11 +352,12 @@ fun DurationButton(
     }
 }
 
+// ── Mode Card ─────────────────────────────────────────────────────────────────
 @Composable
 fun ModeCard(
     title: String,
     subtitle: String,
-    icon: Painter, // Changed from ImageVector to Painter
+    icon: Painter,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -260,7 +379,7 @@ fun ModeCard(
             modifier = Modifier.padding(12.dp)
         ) {
             Icon(
-                painter = icon, // Changed from imageVector to painter
+                painter = icon,
                 contentDescription = title,
                 tint = if (isSelected) Color.White else Color(0xFFA0A3B5),
                 modifier = Modifier.size(28.dp)
