@@ -26,7 +26,6 @@ import com.example.disciplinex.R
 fun FocusSessionScreen() {
     // State management for the clickable selections
     var selectedDuration by remember { mutableStateOf("30 min") }
-    var selectedMode by remember { mutableStateOf("Monk Mode") }
 
     // Theme Colors based on the UI
     val darkBackground = Color(0xFF0F111A)
@@ -34,7 +33,13 @@ fun FocusSessionScreen() {
     val primaryPurple = Color(0xFF5A44E8)
     val textPrimary = Color.White
     val textSecondary = Color(0xFFA0A3B5)
-
+//about box
+    var selectedMode by remember { mutableStateOf("Monk Mode") }
+    val modeDescriptions = mapOf(
+        "Normal" to "Normal Mode allows you to pause your session anytime. Flexible and relaxed.",
+        "Strict" to "Strict Mode limits interruptions. You can't pause but can exit if needed.",
+        "Monk Mode" to "Monk Mode prevents you from leaving the app until the session ends."
+    )
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -154,17 +159,22 @@ fun FocusSessionScreen() {
         ) {
             Row(modifier = Modifier.padding(16.dp)) {
                 Icon(
-                    painter = painterResource(id = R.drawable.lock), // Updated
+                    painter = painterResource(id = R.drawable.lock),
                     contentDescription = "Info",
                     tint = textSecondary,
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Column {
-                    Text("About Modes", color = textPrimary, fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                    Text(
+                        "About $selectedMode",  // 👈 dynamic title
+                        color = textPrimary,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 14.sp
+                    )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Monk Mode prevents you from leaving the app until the session ends.",
+                        text = modeDescriptions[selectedMode] ?: "",  // 👈 dynamic description
                         color = textSecondary,
                         fontSize = 12.sp,
                         lineHeight = 18.sp
