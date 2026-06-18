@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.disciplinex.R
+import com.example.disciplinex.ViewModel.StatsViewModel
 
 // ── Color Palette ─────────────────────────────────────────────────────────────
 private val BgDark        = Color(0xFF0D0D1A)
@@ -91,9 +92,10 @@ data class MonthStats(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Stats(
-    weekStats:  WeekStats  = WeekStats(),
+    weekStats: WeekStats = WeekStats(),
     monthStats: MonthStats = MonthStats(),
-    onBack: () -> Unit = {}
+    onBack: () -> Unit = {},
+    viewModel: StatsViewModel
 ) {
     // 0 = Weekly, 1 = Monthly
     var selectedTab by remember { mutableStateOf(0) }
@@ -622,6 +624,6 @@ private fun StatCard(
 @Composable
 fun StatisticsScreenPreview() {
     MaterialTheme {
-        Stats()
+       // Stats()
     }
 }

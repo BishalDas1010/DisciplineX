@@ -25,10 +25,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.disciplinex.R
+import com.example.disciplinex.ViewModel.FocusViewModel
 
 @Preview(showSystemUi = true)
 @Composable
-fun FocusingScreen() {
+fun FocusingScreen(viewModel: FocusViewModel, onSessionComplete: () -> Unit) {
     // Theme Colors
     val darkBackground = Color(0xFF0F111A)
     val surfaceBackground = Color(0xFF1E2132)

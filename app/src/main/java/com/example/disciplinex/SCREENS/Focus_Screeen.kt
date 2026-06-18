@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.disciplinex.R
+import com.example.disciplinex.ViewModel.FocusViewModel
 
 // ── Data model for a blocked app entry ───────────────────────────────────────
 data class BlockedAppItem(
@@ -30,7 +31,7 @@ data class BlockedAppItem(
 
 @Preview(showSystemUi = true)
 @Composable
-fun FocusSessionScreen() {
+fun FocusSessionScreen(viewModel: FocusViewModel, onNavigateToFocusing: () -> Unit) {
     var selectedDuration by remember { mutableStateOf("30 min") }
 
     val darkBackground    = Color(0xFF0F111A)

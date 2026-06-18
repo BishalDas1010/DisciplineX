@@ -1,6 +1,5 @@
 package com.example.disciplinex.SCREENS
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.disciplinex.R
+import com.example.disciplinex.ViewModel.ShieldViewModel
 
 // ── Color tokens (shared with HomeScreen) ─────────────────────────────────────
 private val BgDeep       = Color(0xFF0B0B18)
@@ -37,14 +37,14 @@ data class AppBlockItem(
     val initiallyBlocked: Boolean = true
 )
 
-// ── Preview ───────────────────────────────────────────────────────────────────
+// ── Preview
 @Preview(showSystemUi = true)
 @Composable
 fun ShieldPreview() {
-    Shield_Screen()
+   // Shield_Screen()
 }
 
-// ── Main Composable ───────────────────────────────────────────────────────────
+// ── Main Composable
 @Composable
 fun Shield_Screen(
     onBack: () -> Unit = {},
@@ -52,7 +52,8 @@ fun Shield_Screen(
     onNavStats: () -> Unit = {},
     onNavShield: () -> Unit = {},
     onNavSettings: () -> Unit = {},
-    onAddMoreApps: () -> Unit = {}
+    onAddMoreApps: () -> Unit = {},
+    viewModel: ShieldViewModel
 ) {
     // Sample blocked apps — swap iconRes with real app icon drawables
     val apps = remember {

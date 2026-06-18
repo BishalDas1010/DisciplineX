@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.disciplinex.R
+import com.example.disciplinex.ViewModel.HomeViewModel
 
 // Color tokens
 private val BgDeep       = Color(0xFF0B0B18)
@@ -36,7 +37,7 @@ private val NavBg        = Color(0xFF10101E)
 @Preview(showSystemUi = true)
 @Composable
 fun HomePreview() {
-    HomeScreen()
+    //HomeScreen()
 }
 
 // Main Screen
@@ -47,7 +48,8 @@ fun HomeScreen(
     onNavShield: () -> Unit = {},
     onNavSettings: () -> Unit = {},
     onStartSession: () -> Unit = {},
-    onShieldTap: () -> Unit = {}
+    onShieldTap: () -> Unit = {},
+    viewModel: HomeViewModel,
 ) {
     Box(
         modifier = Modifier
@@ -171,7 +173,9 @@ fun HomeScreen(
                         .background(BgCard)
                         .padding(18.dp)
                 ) {
-                    Column {
+                    Column(modifier = Modifier.clickable{
+                        onNavStats()
+                    }) {
                         Text(text = "Current Streak", color = TextSecond, fontSize = 13.sp)
                         Spacer(Modifier.height(8.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
