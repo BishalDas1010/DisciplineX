@@ -1,4 +1,4 @@
-package com.example.disciplinex.Repo
+package com.example.disciplinex.MVVM.Repo
 
 import com.example.disciplinex.MVVM.BlockedApp
 import com.example.disciplinex.MVVM.FocusSession

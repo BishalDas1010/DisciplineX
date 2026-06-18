@@ -3,7 +3,7 @@ package com.example.disciplinex.ViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.disciplinex.MVVM.BlockedApp
-import com.example.disciplinex.Repo.DisciplineRepository
+import com.example.disciplinex.MVVM.Repo.DisciplineRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,7 +55,7 @@ class FocusViewModel(
         timerJob?.cancel()
         currentSessionId?.let { id ->
             viewModelScope.launch {
-                val actualMinutes =0 // compute from duration - remaining
+                val actualMinutes =0
                     repository.endSession(id, actualMinutes)
                 currentSessionId = null
             }

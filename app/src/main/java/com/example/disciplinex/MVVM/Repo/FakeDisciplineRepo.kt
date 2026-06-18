@@ -1,4 +1,4 @@
-package com.example.disciplinex.Repo
+package com.example.disciplinex.MVVM.Repo
 
 import androidx.compose.ui.graphics.Color
 import com.example.disciplinex.MVVM.BlockedApp

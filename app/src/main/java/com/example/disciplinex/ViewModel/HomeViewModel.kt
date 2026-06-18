@@ -3,7 +3,7 @@ package com.example.disciplinex.ViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.disciplinex.MVVM.Habit
-import com.example.disciplinex.Repo.DisciplineRepository
+import com.example.disciplinex.MVVM.Repo.DisciplineRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn

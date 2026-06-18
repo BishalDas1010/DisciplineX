@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.disciplinex.Repo.FakeDisciplineRepository
+import com.example.disciplinex.MVVM.Repo.FakeDisciplineRepository
 import com.example.disciplinex.ui.theme.DisciplineXTheme
 
 class MainActivity : ComponentActivity() {
