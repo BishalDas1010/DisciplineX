@@ -24,8 +24,11 @@ class FocusViewModel(
         //started = from when   the flow should start collecting.(when)
         //initialValue =
         .stateIn(scope = viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
-//here i'm just store  All  events into state-flow formate
+    //here i'm just store  All  events into state-flow formate
     val blockedApps: StateFlow<List<BlockedApp>> = _blockedApps
+
+    private val _isRunning = MutableStateFlow(false)
+    val isRunning: StateFlow<Boolean> = _isRunning.asStateFlow()
 
     private var currentSessionId: Int? = null
     private var timerJob: Job? = null
@@ -41,27 +44,45 @@ class FocusViewModel(
         }
     }
 
+    // Updated: sets running state to true
     private fun startTimer() {
         timerJob?.cancel()
+        _isRunning.value = true   // mark as running
         timerJob = viewModelScope.launch {
             while (_remainingSeconds.value > 0) {
                 delay(1000)
                 _remainingSeconds.value -= 1
             }
             // Timer finished – end session automatically
+            _isRunning.value = false  // mark as stopped
             endSession()
         }
     }
 
-    fun pauseTimer() { timerJob?.cancel() }
-    fun resumeTimer() { if (_remainingSeconds.value > 0) startTimer() }
+    // Updated: sets running state to false
+    fun pauseTimer() {
+        timerJob?.cancel()
+        _isRunning.value = false  // mark as paused
+    }
 
+    // Updated: resume uses startTimer() which sets state to true
+    fun resumeTimer() {
+        if (_remainingSeconds.value > 0) startTimer()
+    }
+
+    // 🆕 Optional helper to toggle with one call (you can use this in your click handler)
+    fun toggleTimer() {
+        if (_isRunning.value) pauseTimer() else resumeTimer()
+    }
+
+    // Updated: ensures running state is false when session ends
     fun endSession() {
         timerJob?.cancel()
+        _isRunning.value = false  // clean reset
         currentSessionId?.let { id ->
             viewModelScope.launch {
-                val actualMinutes =0
-                    repository.endSession(id, actualMinutes)
+                val actualMinutes = 0
+                repository.endSession(id, actualMinutes)
                 currentSessionId = null
             }
         }

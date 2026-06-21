@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.disciplinex.R
 import com.example.disciplinex.MVVM.ViewModel.FocusViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 
 @Preview(showSystemUi = true)
 @Composable
@@ -38,6 +40,8 @@ fun FocusingScreen(viewModel: FocusViewModel, onSessionComplete: () -> Unit) {
     val accentBlue = Color(0xFF2FA2FF)
     val accentPurple = Color(0xFF5A44E8)
     val dangerRed = Color(0xFFFF4C4C)
+
+    val isRunning by viewModel.isRunning.collectAsState()
 
     Column(
         modifier = Modifier
@@ -88,7 +92,7 @@ fun FocusingScreen(viewModel: FocusViewModel, onSessionComplete: () -> Unit) {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "45:22",
+                    text = "${viewModel.remainingSeconds.collectAsState().value}",
                     color = textPrimary,
                     fontSize = 56.sp,
                     fontWeight = FontWeight.Bold
@@ -121,6 +125,8 @@ fun FocusingScreen(viewModel: FocusViewModel, onSessionComplete: () -> Unit) {
             modifier = Modifier.fillMaxWidth()
         ) {
             // Pause Button
+
+
             Surface(
                 color = surfaceBackground,
                 shape = RoundedCornerShape(24.dp),
@@ -128,15 +134,29 @@ fun FocusingScreen(viewModel: FocusViewModel, onSessionComplete: () -> Unit) {
                     .weight(1f)
                     .height(64.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .clickable { /* Handle Pause */ }
+                    .clickable {
+                        if (isRunning) viewModel.pauseTimer() else viewModel.resumeTimer()
+                    }
             ) {
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(painter = painterResource(R.drawable.pause), contentDescription = "Pause", tint = textPrimary, modifier = Modifier.size(30.dp))
+                    Icon(
+                        painter = painterResource(
+                            if (isRunning) R.drawable.pause else R.drawable.play  // or resume icon
+                        ),
+                        contentDescription = if (isRunning) "Pause" else "Resume",
+                        tint = textPrimary,
+                        modifier = Modifier.size(30.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Pause", color = textPrimary, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = if (isRunning) "Pause" else "Resume",
+                        color = textPrimary,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
             }
 
@@ -149,7 +169,7 @@ fun FocusingScreen(viewModel: FocusViewModel, onSessionComplete: () -> Unit) {
                     .weight(1f)
                     .height(64.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .clickable { /* Handle End Session */ }
+                    .clickable {viewModel.endSession() }
             ) {
                 Row(
                     horizontalArrangement = Arrangement.Center,

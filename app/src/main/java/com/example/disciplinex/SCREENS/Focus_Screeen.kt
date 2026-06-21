@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,7 +18,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.disciplinex.R
@@ -29,18 +29,30 @@ data class BlockedAppItem(
     val contentDesc: String
 )
 
-//@Preview(showSystemUi = true)
-
 @Composable
-fun FocusSessionScreen(viewModel: FocusViewModel, on_startSession:()-> Unit, onNavigateToFocusing: () -> Unit) {
-    var selectedDuration by remember { mutableStateOf("30 min") }
-
+fun FocusSessionScreen(
+    viewModel: FocusViewModel,
+    on_startSession: () -> Unit,
+    onNavigateToFocusing: () -> Unit
+) {
+    // ── UI colours ───────────────────────────────────────────────────────────
     val darkBackground    = Color(0xFF0F111A)
     val surfaceBackground = Color(0xFF1E2132)
     val primaryPurple     = Color(0xFF5A44E8)
     val textPrimary       = Color.White
     val textSecondary     = Color(0xFFA0A3B5)
 
+    // ── State for duration & custom picker
+    var selectedDuration by remember { mutableStateOf("30 min") }
+    var isCustomSelected by remember { mutableStateOf(false) }
+    var customDurationText by remember { mutableStateOf("") }
+    var showCustomPicker by remember { mutableStateOf(false) }
+
+    // Temporary values for the picker
+    var tempHours by remember { mutableStateOf(0) }
+    var tempMinutes by remember { mutableStateOf(30) }
+
+    // ── Mode state ──────────────────────────────────────────────────────────
     var selectedMode by remember { mutableStateOf("Monk Mode") }
 
     val modeDescriptions = mapOf(
@@ -49,8 +61,7 @@ fun FocusSessionScreen(viewModel: FocusViewModel, on_startSession:()-> Unit, onN
         "Monk Mode" to "Monk Mode prevents you from leaving the app until the session ends."
     )
 
-    // ── Replace these with your actual app icon drawables ────────────────────
-    // e.g. R.drawable.ic_instagram, R.drawable.ic_youtube, R.drawable.ic_facebook
+    // ── Blocked apps (replace with your own drawables) ─────────────────────
     val blockedApps = listOf(
         BlockedAppItem(iconRes = R.drawable.lock, contentDesc = "Instagram"),
         BlockedAppItem(iconRes = R.drawable.lock, contentDesc = "YouTube"),
@@ -58,6 +69,7 @@ fun FocusSessionScreen(viewModel: FocusViewModel, on_startSession:()-> Unit, onN
     )
     val extraBlockedCount = 3   // apps blocked but not shown as icons
 
+    // ── Main UI ─────────────────────────────────────────────────────────────
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -65,16 +77,12 @@ fun FocusSessionScreen(viewModel: FocusViewModel, on_startSession:()-> Unit, onN
             .padding(16.dp)
             .statusBarsPadding()
     ) {
-        // ── Top App Bar ───────────────────────────────────────────────────────
+        // ── Top App Bar ─────────────────────────────────────────────────────
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            IconButton(
-                onClick = {
-                    on_startSession()
-                }
-            ) {
+            IconButton(onClick = on_startSession) {
                 Icon(
                     painter = painterResource(id = R.drawable.back),
                     contentDescription = "Back",
@@ -100,7 +108,7 @@ fun FocusSessionScreen(viewModel: FocusViewModel, on_startSession:()-> Unit, onN
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // ── Duration Section ──────────────────────────────────────────────────
+        // ── Duration Section ──────────────────────────────────────────────
         Text("Choose Duration", color = textPrimary, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -111,8 +119,18 @@ fun FocusSessionScreen(viewModel: FocusViewModel, on_startSession:()-> Unit, onN
                 durations.take(3).forEach { duration ->
                     DurationButton(
                         text = duration,
-                        isSelected = selectedDuration == duration,
-                        onClick = { selectedDuration = duration },
+                        isSelected = if (duration == "Custom") isCustomSelected else selectedDuration == duration,
+                        onClick = {
+                            if (duration == "Custom") {
+                                // Open the custom picker
+                                tempHours = 0
+                                tempMinutes = 30
+                                showCustomPicker = true
+                            } else {
+                                isCustomSelected = false
+                                selectedDuration = duration
+                            }
+                        },
                         modifier = Modifier.weight(1f),
                         primaryPurple = primaryPurple,
                         surfaceColor = surfaceBackground
@@ -123,8 +141,17 @@ fun FocusSessionScreen(viewModel: FocusViewModel, on_startSession:()-> Unit, onN
                 durations.drop(3).forEach { duration ->
                     DurationButton(
                         text = duration,
-                        isSelected = selectedDuration == duration,
-                        onClick = { selectedDuration = duration },
+                        isSelected = if (duration == "Custom") isCustomSelected else selectedDuration == duration,
+                        onClick = {
+                            if (duration == "Custom") {
+                                tempHours = 0
+                                tempMinutes = 30
+                                showCustomPicker = true
+                            } else {
+                                isCustomSelected = false
+                                selectedDuration = duration
+                            }
+                        },
                         modifier = Modifier.weight(1f),
                         primaryPurple = primaryPurple,
                         surfaceColor = surfaceBackground
@@ -133,9 +160,22 @@ fun FocusSessionScreen(viewModel: FocusViewModel, on_startSession:()-> Unit, onN
             }
         }
 
+        // Show selected custom duration if any
+        if (isCustomSelected && customDurationText.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Selected: $customDurationText",
+                color = primaryPurple,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        }
+
         Spacer(modifier = Modifier.height(32.dp))
 
-        // ── Mode Section ──────────────────────────────────────────────────────
+        // ── Mode Section
         Text("Choose Mode", color = textPrimary, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -174,7 +214,7 @@ fun FocusSessionScreen(viewModel: FocusViewModel, on_startSession:()-> Unit, onN
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // ── About Info Box ────────────────────────────────────────────────────
+        // ── About Info Box
         Surface(
             color = surfaceBackground,
             shape = RoundedCornerShape(16.dp),
@@ -208,7 +248,7 @@ fun FocusSessionScreen(viewModel: FocusViewModel, on_startSession:()-> Unit, onN
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // ── Blocked Apps Section ──────────────────────────────────────────────
+        // ── Blocked Apps Section ──────────────────────────────────────────
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -239,9 +279,9 @@ fun FocusSessionScreen(viewModel: FocusViewModel, on_startSession:()-> Unit, onN
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // ── Start Session Button ──────────────────────────────────────────────
+        // ── Start Session Button ──────────────────────────────────────────
         Button(
-            onClick = { /* Handle Start Session */ },
+            onClick = { onNavigateToFocusing() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
@@ -263,16 +303,92 @@ fun FocusSessionScreen(viewModel: FocusViewModel, on_startSession:()-> Unit, onN
             )
         }
     }
+
+    // ── Custom Duration Picker Dialog ─────────────────────────────────────
+    if (showCustomPicker) {
+        AlertDialog(
+            onDismissRequest = { showCustomPicker = false },
+            title = { Text("Set Custom Duration", color = Color.White) },
+            text = {
+                Column {
+                    // Hours row
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Hours", color = Color.White, modifier = Modifier.weight(1f))
+                        IconButton(onClick = { if (tempHours > 0) tempHours-- }) {
+                            Icon(painter = painterResource(R.drawable.negtive), contentDescription = "Decrease hours", tint = Color.White)
+                        }
+                        Text(
+                            text = "$tempHours",
+                            color = Color.White,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.width(48.dp),
+                            textAlign = TextAlign.Center
+                        )
+                        IconButton(onClick = { tempHours++ }) {
+                            Icon(painter = painterResource(R.drawable.positive), contentDescription = "Increase hours", tint = Color.White)
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    // Minutes row (step 5)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Minutes", color = Color.White, modifier = Modifier.weight(1f))
+                        IconButton(onClick = { if (tempMinutes >= 5) tempMinutes -= 5 }) {
+                            Icon(painter = painterResource(R.drawable.negtive), contentDescription = "Decrease minutes", tint = Color.White)
+                        }
+                        Text(
+                            text = "$tempMinutes",
+                            color = Color.White,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.width(48.dp),
+                            textAlign = TextAlign.Center
+                        )
+                        IconButton(onClick = { if (tempMinutes < 55) tempMinutes += 5 }) {
+                            Icon(painter = painterResource(R.drawable.positive), contentDescription = "Increase minutes", tint = Color.White)
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        val hours = tempHours
+                        val minutes = tempMinutes
+                        val formatted = when {
+                            hours == 0 -> "${minutes} min"
+                            minutes == 0 -> "${hours}h"
+                            else -> "${hours}h ${minutes}min"
+                        }
+                        selectedDuration = formatted
+                        customDurationText = formatted
+                        isCustomSelected = true
+                        showCustomPicker = false
+                    }
+                ) {
+                    Text("OK", color = primaryPurple)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showCustomPicker = false }) {
+                    Text("Cancel", color = Color.Gray)
+                }
+            },
+            containerColor = surfaceBackground,
+            shape = RoundedCornerShape(16.dp)
+        )
+    }
 }
 
 // ── Blocked Apps Row ──────────────────────────────────────────────────────────
-/**
- * Horizontal row of circular app icons + optional "+N" overflow badge.
- *
- * @param apps         Visible app entries (3–5 recommended)
- * @param extraCount   How many more apps are blocked but not shown as icons
- * @param surfaceColor Background for the "+N" badge
- */
 @Composable
 fun BlockedAppsRow(
     apps: List<BlockedAppItem>,
@@ -308,10 +424,6 @@ fun BlockedAppsRow(
 }
 
 // ── Single App Icon Circle ────────────────────────────────────────────────────
-/**
- * Circular container for one blocked app icon.
- * Set tint = Color.Unspecified to preserve your icon's original colors.
- */
 @Composable
 fun AppIconCircle(app: BlockedAppItem) {
     Box(
@@ -359,6 +471,7 @@ fun DurationButton(
         }
     }
 }
+
 
 // ── Mode Card ─────────────────────────────────────────────────────────────────
 @Composable
