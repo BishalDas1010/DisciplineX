@@ -1,4 +1,4 @@
-package com.example.disciplinex.ViewModel
+package com.example.disciplinex.MVVM.ViewModel
 
 import androidx.lifecycle.ViewModel
 

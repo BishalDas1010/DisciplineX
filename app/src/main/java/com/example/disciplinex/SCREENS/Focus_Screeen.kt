@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.disciplinex.R
-import com.example.disciplinex.ViewModel.FocusViewModel
+import com.example.disciplinex.MVVM.ViewModel.FocusViewModel
 
 // ── Data model for a blocked app entry ───────────────────────────────────────
 data class BlockedAppItem(
@@ -29,9 +29,10 @@ data class BlockedAppItem(
     val contentDesc: String
 )
 
-@Preview(showSystemUi = true)
+//@Preview(showSystemUi = true)
+
 @Composable
-fun FocusSessionScreen(viewModel: FocusViewModel, onNavigateToFocusing: () -> Unit) {
+fun FocusSessionScreen(viewModel: FocusViewModel, on_startSession:()-> Unit, onNavigateToFocusing: () -> Unit) {
     var selectedDuration by remember { mutableStateOf("30 min") }
 
     val darkBackground    = Color(0xFF0F111A)
@@ -69,12 +70,18 @@ fun FocusSessionScreen(viewModel: FocusViewModel, onNavigateToFocusing: () -> Un
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.back),
-                contentDescription = "Back",
-                tint = textPrimary,
-                modifier = Modifier.size(20.dp)
-            )
+            IconButton(
+                onClick = {
+                    on_startSession()
+                }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.back),
+                    contentDescription = "Back",
+                    tint = textPrimary,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
             Spacer(modifier = Modifier.width(24.dp))
             Text(
                 text = "Start Focus Session",
@@ -136,7 +143,7 @@ fun FocusSessionScreen(viewModel: FocusViewModel, onNavigateToFocusing: () -> Un
             ModeCard(
                 title = "Normal",
                 subtitle = "Pause allowed",
-                icon = painterResource(id = R.drawable.lock),
+                icon = painterResource(id = R.drawable.meditation),
                 isSelected = selectedMode == "Normal",
                 onClick = { selectedMode = "Normal" },
                 modifier = Modifier.weight(1f),
@@ -146,7 +153,7 @@ fun FocusSessionScreen(viewModel: FocusViewModel, onNavigateToFocusing: () -> Un
             ModeCard(
                 title = "Strict",
                 subtitle = "Limited interruptions",
-                icon = painterResource(id = R.drawable.lock),
+                icon = painterResource(id = R.drawable.trafficsignal),
                 isSelected = selectedMode == "Strict",
                 onClick = { selectedMode = "Strict" },
                 modifier = Modifier.weight(1f),
@@ -156,7 +163,7 @@ fun FocusSessionScreen(viewModel: FocusViewModel, onNavigateToFocusing: () -> Un
             ModeCard(
                 title = "Monk Mode",
                 subtitle = "No exits allowed",
-                icon = painterResource(id = R.drawable.lock),
+                icon = painterResource(id = R.drawable.spy),
                 isSelected = selectedMode == "Monk Mode",
                 onClick = { selectedMode = "Monk Mode" },
                 modifier = Modifier.weight(1f),

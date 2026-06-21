@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.disciplinex.R
-import com.example.disciplinex.ViewModel.FocusViewModel
+import com.example.disciplinex.MVVM.ViewModel.FocusViewModel
 
 @Preview(showSystemUi = true)
 @Composable

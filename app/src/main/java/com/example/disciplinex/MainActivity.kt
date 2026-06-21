@@ -16,8 +16,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.disciplinex.MVVM.Repo.FakeDisciplineRepository
+import com.example.disciplinex.MVVM.ViewModel.FocusViewModel
+import com.example.disciplinex.MVVM.ViewModel.HomeViewModel
+import com.example.disciplinex.MVVM.ViewModel.ShieldViewModel
+import com.example.disciplinex.MVVM.ViewModel.StatsViewModel
+import com.example.disciplinex.MVVM.ViewModel.viewModelFactory
 import com.example.disciplinex.SCREENS.*
-import com.example.disciplinex.ViewModel.*
 
 class MainActivity : ComponentActivity() {
     // Create the repository once (later swap with real Room)
@@ -28,10 +32,26 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             // Create ViewModels using the repository
-            val homeViewModel: HomeViewModel = viewModel(factory = viewModelFactory { HomeViewModel(repository) })
-            val focusViewModel: FocusViewModel = viewModel(factory = viewModelFactory { FocusViewModel(repository) })
-            val shieldViewModel: ShieldViewModel = viewModel(factory = viewModelFactory { ShieldViewModel(repository) })
-            val statsViewModel: StatsViewModel = viewModel(factory = viewModelFactory { StatsViewModel(repository) })
+            val homeViewModel: HomeViewModel = viewModel(factory = viewModelFactory {
+                HomeViewModel(
+                    repository
+                )
+            })
+            val focusViewModel: FocusViewModel = viewModel(factory = viewModelFactory {
+                FocusViewModel(
+                    repository
+                )
+            })
+            val shieldViewModel: ShieldViewModel = viewModel(factory = viewModelFactory {
+                ShieldViewModel(
+                    repository
+                )
+            })
+            val statsViewModel: StatsViewModel = viewModel(factory = viewModelFactory {
+                StatsViewModel(
+                    repository
+                )
+            })
 
             MyAppNavigation(
                 homeViewModel = homeViewModel,
@@ -130,6 +150,12 @@ fun MyAppNavigation(
                         navController.navigate(Screen.Focus_session.route) {
                             // Clear back stack so user can't go back to setup
                             popUpTo(Screen.Focus_Screeen.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
+                    on_startSession = {
+                        navController.navigate(Screen.Home.route){
+                            popUpTo (Screen.Home.route){  inclusive = true}
                             launchSingleTop = true
                         }
                     }

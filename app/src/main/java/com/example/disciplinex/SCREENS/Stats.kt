@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.disciplinex.R
-import com.example.disciplinex.ViewModel.StatsViewModel
+import com.example.disciplinex.MVVM.ViewModel.StatsViewModel
 
 // ── Color Palette ─────────────────────────────────────────────────────────────
 private val BgDark        = Color(0xFF0D0D1A)

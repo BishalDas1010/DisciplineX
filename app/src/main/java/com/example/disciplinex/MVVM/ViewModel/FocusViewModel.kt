@@ -1,4 +1,4 @@
-package com.example.disciplinex.ViewModel
+package com.example.disciplinex.MVVM.ViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,12 +14,17 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class FocusViewModel(
+    // Repository acts as a bridge between ViewModel and Database/API
     private val repository: DisciplineRepository
 ) : ViewModel() {
-
+    //this fetch all the Blocked apps from my db
     private val _blockedApps = repository.getBlockedApps()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
-
+        //ViewModel converts it to StateFlow using .stateIn()
+        //.state In function need three things Scope = from where the code will start (where)
+        //started = from when   the flow should start collecting.(when)
+        //initialValue =
+        .stateIn(scope = viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+//here i'm just store  All  events into state-flow formate
     val blockedApps: StateFlow<List<BlockedApp>> = _blockedApps
 
     private var currentSessionId: Int? = null

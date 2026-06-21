@@ -1,4 +1,4 @@
-package com.example.disciplinex.ViewModel   // consider renaming to lowercase
+package com.example.disciplinex.MVVM.ViewModel   // consider renaming to lowercase
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

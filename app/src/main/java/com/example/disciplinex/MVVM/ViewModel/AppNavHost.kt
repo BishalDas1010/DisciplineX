@@ -1,4 +1,4 @@
-package com.example.disciplinex.ViewModel
+package com.example.disciplinex.MVVM.ViewModel
 
  // or keep it in the main package
 
@@ -30,7 +30,8 @@ fun AppNavHost(
         composable(Screen.Focus_Screeen.route) {
             FocusSessionScreen(
                 viewModel = focusViewModel,
-                onNavigateToFocusing = { navController.navigate(Screen.Focus_session.route) }
+                onNavigateToFocusing = { navController.navigate(Screen.Focus_session.route) },
+                on_startSession = {navController.navigate(Screen.Home.route)}
             )
         }
 

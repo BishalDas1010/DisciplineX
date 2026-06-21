@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.disciplinex.R
-import com.example.disciplinex.ViewModel.HomeViewModel
+import com.example.disciplinex.MVVM.ViewModel.HomeViewModel
 
 // Color tokens
 private val BgDeep       = Color(0xFF0B0B18)
@@ -33,12 +33,7 @@ private val TextSecond   = Color(0xFFAAAAAA)
 private val TextMuted    = Color(0xFF55556A)
 private val NavBg        = Color(0xFF10101E)
 
-// Preview
-@Preview(showSystemUi = true)
-@Composable
-fun HomePreview() {
-    //HomeScreen()
-}
+
 
 // Main Screen
 @Composable
