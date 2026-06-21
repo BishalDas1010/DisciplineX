@@ -169,7 +169,9 @@ fun FocusingScreen(viewModel: FocusViewModel, onSessionComplete: () -> Unit) {
                     .weight(1f)
                     .height(64.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .clickable {viewModel.endSession() }
+                    .clickable {viewModel.endSession()
+                                onSessionComplete()
+                    }
             ) {
                 Row(
                     horizontalArrangement = Arrangement.Center,
