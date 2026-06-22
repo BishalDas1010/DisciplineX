@@ -26,7 +26,7 @@ class FocusViewModel(
         .stateIn(scope = viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
     //here i'm just store  All  events into state-flow formate
     val blockedApps: StateFlow<List<BlockedApp>> = _blockedApps
-
+    //
     private val _isRunning = MutableStateFlow(false)
     val isRunning: StateFlow<Boolean> = _isRunning.asStateFlow()
 
@@ -34,6 +34,25 @@ class FocusViewModel(
     private var timerJob: Job? = null
     private val _remainingSeconds = MutableStateFlow(0)
     val remainingSeconds: StateFlow<Int> = _remainingSeconds.asStateFlow()
+
+
+    //
+    private val _selectedMode = MutableStateFlow("Monk Mode")
+    val selectedMode: StateFlow<String> = _selectedMode.asStateFlow()
+
+
+    // Inside FocusViewModel class:
+
+    private val _selectedDurationMinutes = MutableStateFlow(0)
+    val selectedDurationMinutes: StateFlow<Int> = _selectedDurationMinutes.asStateFlow()
+
+    fun updateDuration(minutes: Int) {
+        _selectedDurationMinutes.value = minutes
+    }
+
+    fun updateMode(mode: String) {
+        _selectedMode.value = mode
+    }
 
     fun startNewSession(durationMinutes: Int, mode: String) {
         viewModelScope.launch {
