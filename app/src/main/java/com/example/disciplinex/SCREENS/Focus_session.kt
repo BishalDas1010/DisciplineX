@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,9 +30,11 @@ import com.example.disciplinex.MVVM.ViewModel.FocusViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 
-@Preview(showSystemUi = true)
 @Composable
-fun FocusingScreen(viewModel: FocusViewModel, onSessionComplete: () -> Unit) {
+fun FocusingScreen(viewModel: FocusViewModel,
+                   onEndSession: () -> Unit,
+                   //Called when session ends naturally
+                   onSessionComplete: () -> Unit) {
     // Theme Colors
     val darkBackground = Color(0xFF0F111A)
     val surfaceBackground = Color(0xFF1E2132)
@@ -42,6 +45,9 @@ fun FocusingScreen(viewModel: FocusViewModel, onSessionComplete: () -> Unit) {
     val dangerRed = Color(0xFFFF4C4C)
 
     val isRunning by viewModel.isRunning.collectAsState()
+    val remaining by viewModel.remainingSeconds.collectAsState()
+    val total by viewModel.totalSeconds.collectAsState()
+    val progress = if (total > 0) remaining.toFloat() / total else 0f
 
     Column(
         modifier = Modifier
@@ -78,7 +84,9 @@ fun FocusingScreen(viewModel: FocusViewModel, onSessionComplete: () -> Unit) {
         ) {
             // Background Track & Progress Arc
             CircularTimerView(
-                progress = 0.60f, // 85% remaining
+
+                // remaining time is comming from the view Model
+                progress = progress, // 85% remaining
                 modifier = Modifier.fillMaxSize()
             )
 
@@ -170,7 +178,7 @@ fun FocusingScreen(viewModel: FocusViewModel, onSessionComplete: () -> Unit) {
                     .height(64.dp)
                     .clip(RoundedCornerShape(24.dp))
                     .clickable {viewModel.endSession()
-                                onSessionComplete()
+                        onEndSession()
                     }
             ) {
                 Row(
@@ -185,6 +193,12 @@ fun FocusingScreen(viewModel: FocusViewModel, onSessionComplete: () -> Unit) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        LaunchedEffect(remaining) {
+            if (remaining ==0){
+                onEndSession()
+            }
+        }
     }
 }
 

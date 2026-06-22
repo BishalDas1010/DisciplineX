@@ -36,6 +36,12 @@ class FocusViewModel(
     val remainingSeconds: StateFlow<Int> = _remainingSeconds.asStateFlow()
 
 
+    // Inside FocusViewModel
+
+    private val _totalSeconds = MutableStateFlow(0)
+    val totalSeconds: StateFlow<Int> = _totalSeconds.asStateFlow()
+
+
     //
     private val _selectedMode = MutableStateFlow("Monk Mode")
     val selectedMode: StateFlow<String> = _selectedMode.asStateFlow()
@@ -54,14 +60,6 @@ class FocusViewModel(
         _selectedMode.value = mode
     }
 
-    fun startNewSession(durationMinutes: Int, mode: String) {
-        viewModelScope.launch {
-            val session = repository.startSession(durationMinutes, mode)
-            currentSessionId = session.id
-            _remainingSeconds.value = durationMinutes * 60
-            startTimer()
-        }
-    }
 
     // Updated: sets running state to true
     private fun startTimer() {
@@ -104,6 +102,17 @@ class FocusViewModel(
                 repository.endSession(id, actualMinutes)
                 currentSessionId = null
             }
+        }
+    }
+
+    fun startNewSession(durationMinutes: Int, mode: String) {
+        viewModelScope.launch {
+            val session = repository.startSession(durationMinutes, mode)
+            currentSessionId = session.id
+            val total = durationMinutes * 60
+            _totalSeconds.value = total          // store total
+            _remainingSeconds.value = total      // start with full time
+            startTimer()
         }
     }
 }

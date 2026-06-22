@@ -38,7 +38,10 @@ fun AppNavHost(
         composable(Screen.Focus_session.route) {
             FocusingScreen(
                 viewModel = focusViewModel,
-                onSessionComplete = {
+                onEndSession = {
+                    navController.navigate(Screen.Session_comp.route)
+                },
+                onSessionComplete ={
                     navController.navigate(Screen.Session_comp.route)
                 }
             )

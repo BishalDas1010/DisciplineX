@@ -72,20 +72,15 @@ fun FocusSessionScreen(
 
     // ── Helper to parse duration string to minutes
     fun parseDurationToMinutes(duration: String): Int {
+        val trimmed = duration.trim().lowercase()
         return when {
-            duration.contains("h") && duration.contains("min") -> {
-                val parts = duration.split("h")
-                val hours = parts[0].trim().toIntOrNull() ?: 0
-                val minutesPart = parts[1].trim().replace("min", "").trim()
-                val minutes = minutesPart.toIntOrNull() ?: 0
-                hours * 60 + minutes
-            }
-            duration.contains("h") -> {
-                val hours = duration.replace("h", "").trim().toIntOrNull() ?: 0
+            trimmed.contains("hour") || trimmed.contains("h") -> {
+                val hours = Regex("\\d+").find(trimmed)?.value?.toIntOrNull() ?: 0
                 hours * 60
             }
-            duration.contains("min") -> {
-                duration.replace("min", "").trim().toIntOrNull() ?: 0
+            trimmed.contains("min") -> {
+                val minutes = Regex("\\d+").find(trimmed)?.value?.toIntOrNull() ?: 0
+                minutes
             }
             else -> 0
         }

@@ -166,9 +166,16 @@ fun MyAppNavigation(
             composable(Screen.Focus_session.route) {
                 FocusingScreen(
                     viewModel = focusViewModel,
-                    onSessionComplete = {
+                    onEndSession = {
                         navController.navigate(Screen.Session_comp.route) {
                             popUpTo(Screen.Focus_session.route) { inclusive = true }
+                        }
+                    },
+                    onSessionComplete = {
+                        navController.navigate(Screen.Session_comp.route){
+                            popUpTo(Screen.Focus_session.route){
+                                inclusive=true
+                            }
                         }
                     }
                 )
