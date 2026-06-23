@@ -44,7 +44,7 @@ private val ToggleBg      = Color(0xFF1E1E35)
 private val BlueAccent    = Color(0xFF4DA6FF)
 private val OrangeAccent  = Color(0xFFFF9500)
 
-// ── Data Models ───────────────────────────────────────────────────────────────
+// ── Data Models 
 data class DayBar(val day: String, val hours: Float, val isSelected: Boolean = false)
 
 data class WeekStats(
@@ -88,7 +88,7 @@ data class MonthStats(
     )
 )
 
-// ── Main Screen ───────────────────────────────────────────────────────────────
+// ── Main Screen 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Stats(
@@ -134,7 +134,7 @@ fun Stats(
         ) {
             Spacer(Modifier.height(8.dp))
 
-            // ── Toggle ────────────────────────────────────────────────────────
+            // ── Toggle 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -164,7 +164,7 @@ fun Stats(
 
             Spacer(Modifier.height(16.dp))
 
-            // ── Content switches on tab ───────────────────────────────────────
+            // ── Content switches on tab 
             if (selectedTab == 0) {
                 WeeklyContent(stats = weekStats)
             } else {
@@ -174,7 +174,7 @@ fun Stats(
     }
 }
 
-// ── Weekly Content ────────────────────────────────────────────────────────────
+// ── Weekly Content 
 @Composable
 private fun WeeklyContent(stats: WeekStats) {
     val maxHours = stats.bars.maxOf { it.hours }
@@ -263,7 +263,7 @@ private fun WeeklyContent(stats: WeekStats) {
     Spacer(Modifier.height(16.dp))
 }
 
-// ── Monthly Content ───────────────────────────────────────────────────────────
+// Monthly Content 
 @Composable
 private fun MonthlyContent(stats: MonthStats) {
     val animProgress = remember { Animatable(0f) }
@@ -540,7 +540,7 @@ private fun DonutChart(categories: List<FocusCategory>, modifier: Modifier = Mod
     }
 }
 
-// ── Shared Stats Grid ─────────────────────────────────────────────────────────
+// ── Shared Stats Grid
 @Composable
 private fun StatsGrid(
     totalFocusTime:   String,
@@ -559,7 +559,7 @@ private fun StatsGrid(
     }
 }
 
-// ── Bar Column ────────────────────────────────────────────────────────────────
+// ── Bar Column 
 @Composable
 private fun BarColumn(bar: DayBar, maxHours: Float) {
     val animProgress = remember { Animatable(0f) }
@@ -591,7 +591,7 @@ private fun BarColumn(bar: DayBar, maxHours: Float) {
     }
 }
 
-// ── Stat Card ─────────────────────────────────────────────────────────────────
+// ── Stat Card
 @Composable
 private fun StatCard(
     label:      String,
@@ -617,9 +617,9 @@ private fun StatCard(
             Text(value, color = valueColor, fontSize = 22.sp, fontWeight = FontWeight.Bold)
         }
     }
-}
 
-// ── Preview ───────────────────────────────────────────────────────────────────
+
+// ── Preview
 @Preview(showBackground = true, backgroundColor = 0xFF0D0D1A, showSystemUi = true)
 @Composable
 fun StatisticsScreenPreview() {
