@@ -158,7 +158,11 @@ fun MyAppNavigation(
                             popUpTo (Screen.Home.route){  inclusive = true}
                             launchSingleTop = true
                         }
-                    }
+                    },
+                    onShild_screenn = {navController.navigate(Screen.Shield.route){
+                        popUpTo(Screen.Focus_Screeen.route){inclusive=true}
+                        launchSingleTop=true
+                    } }
                 )
             }
 

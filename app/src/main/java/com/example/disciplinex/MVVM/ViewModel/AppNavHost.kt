@@ -31,7 +31,8 @@ fun AppNavHost(
             FocusSessionScreen(
                 viewModel = focusViewModel,
                 onNavigateToFocusing = { navController.navigate(Screen.Focus_session.route) },
-                on_startSession = {navController.navigate(Screen.Home.route)}
+                on_startSession = {navController.navigate(Screen.Home.route)},
+                onShild_screenn = {navController.navigate(Screen.Shield.route)}
             )
         }
 

@@ -36,7 +36,9 @@ data class BlockedAppItem(
 fun FocusSessionScreen(
     viewModel: FocusViewModel,
     on_startSession: () -> Unit,
-    onNavigateToFocusing: () -> Unit
+    onNavigateToFocusing: () -> Unit,
+    onShild_screenn:() -> Unit
+
 ) {
     // ── UI colours
     val darkBackground    = Color(0xFF0F111A)
@@ -276,7 +278,8 @@ fun FocusSessionScreen(
         BlockedAppsRow(
             apps = blockedApps,
             extraCount = extraBlockedCount,
-            surfaceColor = surfaceBackground
+            surfaceColor = surfaceBackground,
+            onShild_screen = {onShild_screenn()}
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -407,8 +410,9 @@ fun FocusSessionScreen(
 fun BlockedAppsRow(
     apps: List<BlockedAppItem>,
     extraCount: Int = 0,
-    surfaceColor: Color
-) {
+    surfaceColor: Color,
+    onShild_screen: () -> Unit
+    ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -425,13 +429,16 @@ fun BlockedAppsRow(
                     .clip(CircleShape)
                     .background(surfaceColor)
                     .border(1.dp, Color(0xFF2E2A45), CircleShape)
+                    .clickable{onShild_screen()}
             ) {
                 Text(
                     text = "+$extraCount",
                     color = Color(0xFFA0A3B5),
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+
                 )
+
             }
         }
     }
