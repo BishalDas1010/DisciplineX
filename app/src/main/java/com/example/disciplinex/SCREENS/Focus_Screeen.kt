@@ -269,7 +269,7 @@ fun FocusSessionScreen(
                 color = primaryPurple,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
-                modifier = Modifier.clickable { /* navigate to manage screen */ }
+                modifier = Modifier.clickable { onShild_screenn()}
             )
         }
 
