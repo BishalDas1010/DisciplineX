@@ -494,7 +494,7 @@ fun DurationButton(
 }
 
 
-// ── Mode Card ─────────────────────────────────────────────────────────────────
+// ── Mode Card
 @Composable
 fun ModeCard(
     title: String,

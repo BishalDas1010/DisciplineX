@@ -617,13 +617,7 @@ private fun StatCard(
             Text(value, color = valueColor, fontSize = 22.sp, fontWeight = FontWeight.Bold)
         }
     }
-
-
-// ── Preview
-@Preview(showBackground = true, backgroundColor = 0xFF0D0D1A, showSystemUi = true)
-@Composable
-fun StatisticsScreenPreview() {
-    MaterialTheme {
-       // Stats()
-    }
 }
+
+
+
