@@ -18,6 +18,8 @@ class FocusViewModel(
     // Repository acts as a bridge between ViewModel and Database/API
     private val repository: DisciplineRepository
 ) : ViewModel() {
+//    val apps: Any
+
     //this fetch all the Blocked apps from my db
     private val _blockedApps = repository.getBlockedApps()
         //ViewModel converts it to StateFlow using .stateIn()
@@ -55,6 +57,16 @@ class FocusViewModel(
 
     private val _selectedDurationMinutes = MutableStateFlow(0)
     val selectedDurationMinutes: StateFlow<Int> = _selectedDurationMinutes.asStateFlow()
+
+    //Installed apps
+//    private  val _installedApps = MutableStateFlow<List<AppItem>>(emptyList())
+//    val installedApps: StateFlow<List<AppItem>> = _installedApps.asStateFlow()
+
+//    private  val _blocked = MutableStateFlow<List<AppItem>>(emptyList())
+//    val _ISblocked: StateFlow<List<AppItem>> = _blocked
+
+
+
 
     fun updateDuration(minutes: Int) {
         _selectedDurationMinutes.value = minutes
@@ -120,7 +132,6 @@ class FocusViewModel(
         }
     }
 
-    fun toggleBlockApp(app: AppInfo) {}
 
     // In FocusViewModel.kt
 

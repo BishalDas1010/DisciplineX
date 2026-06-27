@@ -1,65 +1,39 @@
+// AddAppsToBlockScreen.kt
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-
+import com.example.disciplinex.R
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.disciplinex.R // replace with your actual R
+import com.example.disciplinex.MVVM.Repo.DATAclass.AppItem
+import com.example.disciplinex.MVVM.ViewModel.FocusViewModel_blockedAPP
 
-// Data class for an app (matches your BlockedApp if you add id)
-data class AppItem(
-    val id: Int,
-    val name: String,
-    val iconRes: Int, // drawable resource ID
-    var isSelected: Boolean = false // we'll use mutable state
-)
-@Preview(showSystemUi = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddAppsToBlockScreen(
-
+    viewModel: FocusViewModel_blockedAPP // pass from your navigation/DI
 ) {
-    // State for search query
+    val allApps by viewModel.apps.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
-
-    // Mock list of apps – in real app, get from repository
-    val allApps = remember {
-        listOf(
-            AppItem(1, "Instagram", R.drawable.lock), // replace with your icons
-            AppItem(2, "YouTube", R.drawable.lock),
-            AppItem(3, "Facebook", R.drawable.lock),
-            AppItem(4, "WhatsApp", R.drawable.lock),
-            AppItem(5, "Chrome", R.drawable.lock),
-            AppItem(6, "Twitter", R.drawable.lock),
-            AppItem(7, "Snapchat", R.drawable.lock)
-        )
-    }
-
-    // State for selected status – we'll maintain a separate set of IDs
     var selectedIds by remember { mutableStateOf(setOf<Int>()) }
 
-    // Filter apps based on search query
+    // Filter apps based on search
     val filteredApps = remember(allApps, searchQuery) {
         if (searchQuery.isBlank()) allApps
         else allApps.filter { it.name.contains(searchQuery, ignoreCase = true) }
     }
-
-    // Count selected
-    val selectedCount = selectedIds.size
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Add Apps to Block") },
                 navigationIcon = {
-                    // optional back button
-                    IconButton(onClick = { /* handle back */ }) {
+                    IconButton(onClick = { /* navigate back */ }) {
                         Icon(painter = painterResource(R.drawable.lock), contentDescription = "Back")
                     }
                 }
@@ -79,18 +53,18 @@ fun AddAppsToBlockScreen(
                     .fillMaxWidth()
                     .padding(16.dp),
                 placeholder = { Text("Search apps") },
-//                leadingIcon = { painterResource(R.drawable.lock), contentDescription = "Search") },
+                leadingIcon = { Icon(painter = painterResource(R.drawable.lock), contentDescription = "Search") },
                 singleLine = true
             )
 
-            // Recommended header
+            // Header
             Text(
                 text = "Recommended",
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
 
-            // List of apps
+            // App list
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 contentPadding = PaddingValues(horizontal = 16.dp)
@@ -111,19 +85,18 @@ fun AddAppsToBlockScreen(
                 }
             }
 
-            // Bottom "Add Selected" button
+            // Bottom button
             Button(
                 onClick = {
-                    // Handle adding selected apps
-                    // You can call repository.toggleBlockedApp for each selected id
-                    // or pass the selected list to a callback
+                    viewModel.blockSelectedApps(selectedIds)
+                    selectedIds = emptySet() // clear selection
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                enabled = selectedCount > 0
+                enabled = selectedIds.isNotEmpty()
             ) {
-                Text("Add Selected ($selectedCount)")
+                Text("Add Selected (${selectedIds.size})")
             }
         }
     }
@@ -142,9 +115,9 @@ fun AppListItem(
             .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // App icon – using placeholder; you can load from drawable
+        // Show the real app icon
         Icon(
-            painter = painterResource(id = app.iconRes),
+            painter = app.iconPainter,
             contentDescription = app.name,
             modifier = Modifier.size(40.dp)
         )
@@ -154,17 +127,14 @@ fun AppListItem(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.weight(1f)
         )
-        Checkbox(
-            checked = isSelected,
-            onCheckedChange = onToggle
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewAddAppsToBlockScreen() {
-    MaterialTheme {
-        AddAppsToBlockScreen()
+        // Show checkbox only if not already blocked (optional)
+        if (app.isBlocked) {
+            Text("Blocked", style = MaterialTheme.typography.bodySmall)
+        } else {
+            Checkbox(
+                checked = isSelected,
+                onCheckedChange = onToggle
+            )
+        }
     }
 }

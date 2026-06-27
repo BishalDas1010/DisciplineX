@@ -1,4 +1,4 @@
-package com.example.disciplinex.MVVM.Repo
+package com.example.disciplinex.MVVM.Repo.DATAclass
 
 data class BlockedApp(
     val id: Int,

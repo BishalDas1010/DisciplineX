@@ -2,6 +2,8 @@ package com.example.disciplinex.MVVM.Repo
 
 import com.example.disciplinex.MVVM.FocusSession
 import com.example.disciplinex.MVVM.Habit
+import com.example.disciplinex.MVVM.Repo.DATAclass.AppInfo
+import com.example.disciplinex.MVVM.Repo.DATAclass.BlockedApp
 import com.example.disciplinex.SCREENS.MonthStats
 import com.example.disciplinex.SCREENS.WeekStats
 import kotlinx.coroutines.flow.Flow
@@ -22,4 +24,8 @@ interface DisciplineRepository {
     // Blocked Apps
     fun getBlockedApps(): Flow<List<BlockedApp>>
     suspend fun toggleBlockedApp(appId: Int, blocked: Boolean)
+//fatch all the installed apps from my system
+//suspend fun  getInstalledApps(): List<AppInfo>
+
+
 }
