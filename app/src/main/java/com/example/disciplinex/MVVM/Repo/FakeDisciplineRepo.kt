@@ -1,7 +1,7 @@
 package com.example.disciplinex.MVVM.Repo
 
 import androidx.compose.ui.graphics.Color
-import com.example.disciplinex.MVVM.BlockedApp
+import androidx.compose.ui.res.painterResource
 import com.example.disciplinex.MVVM.FocusSession
 import com.example.disciplinex.MVVM.Habit
 import com.example.disciplinex.R
@@ -92,9 +92,9 @@ class FakeDisciplineRepository : DisciplineRepository {
 
     private val _blockedApps = MutableStateFlow(
         listOf(
-            BlockedApp(name = "Instagram", iconRes = R.drawable.lock, isBlocked = true),
-            BlockedApp(name = "YouTube", iconRes = R.drawable.lock, isBlocked = true),
-            BlockedApp(name = "Facebook", iconRes = R.drawable.lock, isBlocked = true),
+            BlockedApp(id=1,name = "Instagram", iconRes = R.drawable.lock, isBlocked = true),
+            BlockedApp(id=2,name = "YouTube", iconRes = R.drawable.lock, isBlocked = true),
+            BlockedApp(id =3,name = "Facebook", iconRes = R.drawable.lock, isBlocked = true),
         )
     )
     override fun getBlockedApps(): Flow<List<BlockedApp>> = _blockedApps.asStateFlow()

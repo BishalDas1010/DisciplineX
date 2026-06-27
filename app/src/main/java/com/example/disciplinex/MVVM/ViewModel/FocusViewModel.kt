@@ -2,7 +2,7 @@ package com.example.disciplinex.MVVM.ViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.disciplinex.MVVM.BlockedApp
+import com.example.disciplinex.DATA_CLass.AppInfo
 import com.example.disciplinex.MVVM.Repo.DisciplineRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.collections.emptyList
 
 class FocusViewModel(
     // Repository acts as a bridge between ViewModel and Database/API
@@ -23,9 +24,9 @@ class FocusViewModel(
         //.state In function need three things Scope = from where the code will start (where)
         //started = from when   the flow should start collecting.(when)
         //initialValue =
-        .stateIn(scope = viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+        .stateIn(scope = viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
     //here i'm just store  All  events into state-flow formate
-    val blockedApps: StateFlow<List<BlockedApp>> = _blockedApps
+    //val blockedApps: StateFlow<List<BlockedApp>> = _blockedApps
     //
     private val _isRunning = MutableStateFlow(false)
     val isRunning: StateFlow<Boolean> = _isRunning.asStateFlow()
@@ -34,6 +35,9 @@ class FocusViewModel(
     private var timerJob: Job? = null
     private val _remainingSeconds = MutableStateFlow(0)
     val remainingSeconds: StateFlow<Int> = _remainingSeconds.asStateFlow()
+
+
+
 
 
     // Inside FocusViewModel
@@ -115,4 +119,14 @@ class FocusViewModel(
             startTimer()
         }
     }
+
+    fun toggleBlockApp(app: AppInfo) {}
+
+    // In FocusViewModel.kt
+
+
+
+
+
+
 }
